@@ -1,0 +1,21 @@
+.resElement {    
+    box-shadow: 0px 0px 5px 1px black;
+    padding: 15px 25px;
+    margin: 15px;
+}
+.btn-add, .btn-delete, .btn-form {
+    padding: 0px 40px !important;
+    margin: 10px 10px !important;
+}
+.eachResident {    
+    box-shadow: 0px 0px 5px 1px black;
+    padding: 15px 25px 45px;
+    margin: 15px;
+}
+.btn-search {
+    padding: 0px 15px;
+
+}
+.header-request {
+    padding-bottom: 30px
+}
