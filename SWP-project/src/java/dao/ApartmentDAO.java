@@ -33,6 +33,9 @@ public class ApartmentDAO {
             + "ORDER BY A.apartmentId ASC\n"
             + "OFFSET ? ROWS FETCH NEXT 10 ROWS ONLY;";
     private static final String UPDATE_APARTMENT = "UPDATE Apartments SET image = ?, status = ? WHERE apartmentId = ?";
+    private static final String UPDATE_APARTMENTV2 = "update Apartments\n"
+            + "set status = 0\n"
+            + "WHERE apartmentId = (SELECT apartmentId FROM Contracts Where contractId = ?)";
     private static final String UPDATE_APARTMENT_PRICE = "UPDATE ApartmentTypes\n"
             + "SET rentPrice = ?, salePrice = ?\n"
             + "FROM Apartments A, ApartmentTypes B\n"
@@ -174,6 +177,27 @@ public class ApartmentDAO {
                 ptm.setString(2, apartment.getStatus());
                 ptm.setString(3, apartment.getApartmentId());
 
+                check = ptm.executeUpdate() > 0;
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean updateApartment(String contractId) throws SQLException {
+        boolean check = false;
+        try {
+            conn = Utils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(UPDATE_APARTMENTV2);
+                ptm.setString(1, contractId);
                 check = ptm.executeUpdate() > 0;
             }
         } catch (ClassNotFoundException | SQLException e) {

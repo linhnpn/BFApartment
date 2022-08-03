@@ -5,6 +5,7 @@
  */
 package controller;
 
+import dao.ApartmentDAO;
 import dao.ContractDAO;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -31,7 +32,9 @@ public class DeleteContractController extends HttpServlet {
         try {
             String contractId = request.getParameter("contractId");
             ContractDAO dao = new ContractDAO();
+            ApartmentDAO adao = new ApartmentDAO();
             boolean check = dao.deleteContract(contractId, "0");
+            adao.updateApartment(contractId);
             if (check) {
                 url = SUCCESS;
                 request.setAttribute("SUCCESS", "Success!!");
