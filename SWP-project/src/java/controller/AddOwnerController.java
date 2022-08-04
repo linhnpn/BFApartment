@@ -50,8 +50,8 @@ public class AddOwnerController extends HttpServlet {
             } else {
                 owner.setName(name);
             }
-            if (email.length() < 7) {
-                error.setEmailError("Email phải nhiều hơn 7 kí tự");
+            if (email.length() < 7 || !Utils.validEmail(email)) {
+                error.setEmailError("Email phải nhiều hơn 7 kí tự và fomat abc@gmail.com");
                 check = false;
             } else {
                 owner.setEmail(email);
@@ -62,8 +62,12 @@ public class AddOwnerController extends HttpServlet {
             } else {
                 owner.setGender("1".equals(gender));
             }
+            java.util.Date now = new java.util.Date();
             if (!Utils.isValidDate(dob)) {
                 error.setDobError("Ngày sinh không hợp lệ");
+                check = false;
+            } else if (now.compareTo(Utils.getDate(dob)) == -1) {
+                error.setDobError("Ngày sinh không thể đặt trong tương lai!!");
                 check = false;
             } else {
                 owner.setDob(dob);

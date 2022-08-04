@@ -32,7 +32,7 @@ public class ContractDAO {
     private static final String LIST_CONTRACT = "SELECT Contracts.apartmentId, Contracts.startDate, Contracts.contractId, Owners.fullName, Owners.ownerId\n"
             + " FROM Contracts, Owners\n"
             + " WHERE Contracts.ownerId = Owners.ownerId AND Contracts.status = 1";
-    private static final String GET_CONTRACT = "SELECT Contracts.apartmentId, Contracts.startDate, Contracts.contractId, Owners.fullName, Owners.ownerId\n"
+    private static final String GET_CONTRACT = "SELECT Contracts.apartmentId, Contracts.startDate, Contracts.contractId, Owners.fullName, Owners.ownerId, Contracts.endDate\n"
             + " FROM Contracts, Owners\n"
             + " WHERE Contracts.ownerId = Owners.ownerId AND Contracts.status = 1\n"
             + " AND Owners.userId = ?";
@@ -312,8 +312,9 @@ public class ContractDAO {
                     String apartmentId = rs.getString("apartmentId");
                     String fullName = rs.getString("fullName");
                     String startDate = rs.getString("startDate");
+                    String endDate = rs.getString("endDate");
                     String ownerId = rs.getString("ownerId");
-                    contract = new ContractDTO(contractId, apartmentId, fullName, startDate, ownerId);
+                    contract = new ContractDTO(contractId, apartmentId, ownerId, startDate, endDate, ownerId);
                 }
             }
         } catch (ClassNotFoundException | SQLException e) {

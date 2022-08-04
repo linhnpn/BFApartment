@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import utils.Utils;
 
 /**
  *
@@ -42,6 +43,19 @@ public class CreateContractController extends HttpServlet {
             String contractId = "CT" + (numId < 10 ? ("0" + numId) : numId);
             ContractDTO contract = new ContractDTO(contractId, apartmentId, ownerId, startDate, endDate, "1");
             String mess = "";
+            if (ownerId == null || "".equals(ownerId)) {
+                mess = "Vui lòng chọn người đứng tên hợp đồng!!!";
+                check = false;
+            }
+            if (!(startDate == null || "".equals(startDate)) && !(endDate == null || "".equals(endDate))) {
+                if (Utils.getDate(startDate).compareTo(Utils.getDate(endDate)) == 1) {
+                    mess = "Lỗi: Ngày ký hợp đồng bé hơn ngày kết thúc hợp đồng!!";
+                    check = false;
+                }
+            } else if (startDate == null || "".equals(startDate)) {
+                mess = "Ngày tạo hợp đồng không để trống!!!";
+                check = false;
+            }
             if (contractDao.checkDuplicateApartment(apartmentId)) {
                 mess = "Mã phòng " + apartmentId + " đã được sử dụng";
                 request.setAttribute("ERROR_MESSAGE", mess);
@@ -62,6 +76,8 @@ public class CreateContractController extends HttpServlet {
                 } else {
                     request.setAttribute("ERROR_MESSAGE", mess);
                 }
+            }else {
+                request.setAttribute("ERROR_MESSAGE", mess);
             }
         } catch (SQLException e) {
             log("Error at CreateContractController" + e.toString());

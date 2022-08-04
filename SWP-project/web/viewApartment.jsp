@@ -127,7 +127,16 @@
             </nav>
         </div>
         <jsp:include page="footer.jsp"></jsp:include>
-    </body>
+        </body>
+    <c:if test="${requestScope.ERROR!=null}">
+        <c:if test="${not empty requestScope.ERROR}">
+            <script>
+                $(document).ready(function () {
+                    alert("${requestScope.ERROR}");
+                });
+            </script>
+        </c:if>
+    </c:if>
     <script>
         $(document).ready(function () {
             $(".room").addClass("active");

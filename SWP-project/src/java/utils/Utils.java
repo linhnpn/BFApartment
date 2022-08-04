@@ -14,13 +14,18 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
  * @author Minh Hoàng
  */
 public class Utils {
-    
+
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX
+            = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
         Connection conn = null;
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -28,11 +33,16 @@ public class Utils {
         conn = DriverManager.getConnection(url, "sa", "12345678");
         return conn;
     }
-    
+
+    public static boolean validEmail(String emailStr) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+        return matcher.find();
+    }
+
     public static String getMd5(String input) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            
+
             byte[] messageDigest = md.digest(input.getBytes());
             BigInteger no = new BigInteger(1, messageDigest);
             String hashtext = no.toString(16);
@@ -44,7 +54,7 @@ public class Utils {
             throw new RuntimeException(e);
         }
     }
-    
+
     public static Date getDate(String msg) {
         boolean check = true;
         Date date = null;
@@ -58,9 +68,9 @@ public class Utils {
             }
         } while (check);
         return date;
-        
+
     }
-    
+
     public static boolean getBoolean(String input) {
         boolean check = false;
         try {
@@ -71,7 +81,7 @@ public class Utils {
         }
         return check;
     }
-    
+
     public static boolean isValidDate(String input) {
         boolean check = false;
         Date date = null;
@@ -86,12 +96,12 @@ public class Utils {
                 date = null;
             }
             check = true;
-            
+
         } catch (ParseException e) {
         }
         return check;
     }
-    
+
     public static boolean inputPattern(String input, String regex) {
         boolean check = false;
         try {
@@ -104,5 +114,5 @@ public class Utils {
         }
         return check;
     }
-    
+
 }

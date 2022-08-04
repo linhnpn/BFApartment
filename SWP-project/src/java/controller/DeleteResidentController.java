@@ -24,8 +24,8 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "DeleteResidentController", urlPatterns = {"/DeleteResidentController"})
 public class DeleteResidentController extends HttpServlet {
 
-    private static final String SUCCESS = "user.jsp";
-    private static final String ERROR = "deleteResident.jsp";
+    private static final String SUCCESS = "MainController?action=ViewRequest";
+    private static final String ERROR = "MainController?action=BeforeDeleteResident";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -47,11 +47,15 @@ public class DeleteResidentController extends HttpServlet {
             } else {
                 requestId += "00" + String.valueOf(indexReq);
             }
-            daoRes.insertRequest(requestId, ownerId, "delete", "0");
-            for (String residentIdElement : residentId) {
-                daoRes.updateResident(requestId, residentIdElement);
+            if (residentId != null) {
+                daoRes.insertRequest(requestId, ownerId, "delete", "0");
+                for (String residentIdElement : residentId) {
+                    daoRes.updateResident(requestId, residentIdElement);
+                }
+                url = SUCCESS;
+            } else {
+                request.setAttribute("ERROR", "Vui lòng chọn người bạn muốn xóa!!");
             }
-            url = SUCCESS;
 
         } catch (ClassNotFoundException | SQLException e) {
             log("Error at DeleteResidentController: " + e.toString());

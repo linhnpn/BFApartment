@@ -31,7 +31,7 @@
                     </div>
                     <div class="col-md-3 mb-3" >
                         <label>Ngày: </label>
-                        <input type="date" name="date" class="form-control" required id="time"/>
+                        <input type="date" name="date" class="form-control" required id="time" readonly=""/>
                     </div>
                     <div class="col-md-6 mb-3" >
                         <label>Loại sự cố: </label>

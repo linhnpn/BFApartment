@@ -23,6 +23,10 @@ public class ApartmentDAO {
     Connection conn = null;
     PreparedStatement ptm = null;
     ResultSet rs = null;
+    private static final String CHECK_ROOM = "SELECT apartmentId\n"
+            + "FROM Apartments\n"
+            + "WHERE apartmentId IN (SELECT apartmentId FROM Contracts WHERE Contracts.status = 1 AND apartmentId = ?)\n"
+            + "AND apartmentId = ?";
     private static final String COUNT_ROOM = "SELECT COUNT(apartmentId) AS [count]\n"
             + "FROM Apartments WHERE status = ?;";
     private static final String GET_TOTAL_APARTMENT = "SELECT count(*) FROM Apartments WHERE apartmentId LIKE ?";
@@ -67,6 +71,34 @@ public class ApartmentDAO {
             }
         }
         return count;
+    }
+
+    public boolean checkRoom(String apartmentId) throws SQLException {
+        boolean check = false;
+        try {
+            conn = Utils.getConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(CHECK_ROOM);
+                ptm.setString(1, apartmentId);
+                ptm.setString(2, apartmentId);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    check = true;
+                }
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
     }
 
     public List<ApartmentDTO> getListApartment_AD(String searchApartment, int index) throws SQLException {

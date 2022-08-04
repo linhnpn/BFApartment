@@ -61,8 +61,12 @@ public class UpdateResidentController extends HttpServlet {
                 resError.setSexError("Giới tính không hợp lệ");
                 confirm = false;
             }
+            java.util.Date now = new java.util.Date();
             if (!Utils.isValidDate(dob)) {
                 resError.setDobError("Ngày sinh không hợp lệ");
+                confirm = false;
+            } else if (now.compareTo(Utils.getDate(dob)) == -1) {
+                resError.setDobError("Ngày sinh không thể đặt trong tương lai!!");
                 confirm = false;
             }
             if (job.length() < 5) {

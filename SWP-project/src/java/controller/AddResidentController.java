@@ -12,6 +12,7 @@ import dto.ResidentError;
 import dto.UserDTO;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -29,7 +30,7 @@ import utils.Utils;
 @WebServlet(name = "AddResidentController", urlPatterns = {"/AddResidentController"})
 public class AddResidentController extends HttpServlet {
 
-    private static final String SUCCESS = "user.jsp";
+    private static final String SUCCESS = "MainController?action=ViewRequest";
     private static final String ERROR = "addResident.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -60,8 +61,12 @@ public class AddResidentController extends HttpServlet {
                 } else {
                     res.setGender("1".equals(gender[i]));
                 }
+                java.util.Date now = new java.util.Date();
                 if (!Utils.isValidDate(dob[i])) {
                     resError.setDobError("Ngày sinh của người thứ " + (i + 1) + " không hợp lệ");
+                    check = false;
+                } else if (now.compareTo(Utils.getDate(dob[i])) == -1) {
+                    resError.setDobError("Ngày sinh không thể đặt trong tương lai!!");
                     check = false;
                 } else {
                     res.setDob(dob[i]);

@@ -82,13 +82,22 @@
                     </c:if>                
                     </div>
                     <jsp:include page="footer.jsp"></jsp:include>
-                    </body>
-                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
-                    <script>
-                        $(document).ready(function () {
-                            $(".request").addClass("active");
-                        });
-                    </script>
+                        </body>
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+                        <script>
+                            $(document).ready(function () {
+                                $(".request").addClass("active");
+                            });
+                        </script>
+                    <c:if test="${requestScope.ERROR!=null}">
+                        <c:if test="${not empty requestScope.ERROR}">
+                            <script>
+                                $(document).ready(function () {
+                                    alert("${requestScope.ERROR}");
+                                });
+                            </script>
+                        </c:if>
+                    </c:if>
                     <script>
                         $(document).ready(function () {
                             $(".request").addClass("active");

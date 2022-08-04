@@ -69,7 +69,7 @@
                                         </c:if>
 
                                     </h2>
-                                    <span>Đã thuê / Trống</span>
+                                    <span>Đã sử dụng / Trống</span>
                                 </div>
                             </div>
                         </div>

@@ -40,26 +40,42 @@ public class UpdateContractController extends HttpServlet {
             }
             String status = request.getParameter("status");
             boolean check = false;
+            boolean confirm = true;
             ContractDAO dao = new ContractDAO();
-            if (Utils.isValidDate(startDate) && Utils.isValidDate(endDate)) {
-                check = dao.updateContract(new ContractDTO(contractId, apartmentId, "", startDate, endDate, status));
-                if (check) {
-                    url = SUCCESS;
-                    request.setAttribute("SUCCESS", "Success!!!");
-                } else {
-                    request.setAttribute("ERROR", "Error!!!");
+            String mess = "";
+            if (!(startDate == null || "".equals(startDate)) && !("".equals(endDate))) {
+                if (Utils.getDate(startDate).compareTo(Utils.getDate(endDate)) == 1) {
+                    mess = "Lỗi: Ngày tạo hợp đồng bé hơn ngày kết thúc hợp đồng!!";
+                    confirm = false;
                 }
-            } else if (Utils.isValidDate(startDate) && "".equals(endDate)) {
-                check = dao.updateContract(new ContractDTO(contractId, apartmentId, "", startDate, endDate, status));
-                if (check) {
-                    url = SUCCESS;
-                    request.setAttribute("SUCCESS", "Success!!!");
+            } else if (startDate == null || "".equals(startDate)) {
+                mess = "Ngày tạo hợp đồng không để trống!!!";
+                confirm = false;
+            }
+            if (confirm) {
+                if (Utils.isValidDate(startDate) && Utils.isValidDate(endDate)) {
+                    check = dao.updateContract(new ContractDTO(contractId, apartmentId, "", startDate, endDate, status));
+                    if (check) {
+                        url = SUCCESS;
+                        request.setAttribute("SUCCESS", "Success!!!");
+                    } else {
+                        request.setAttribute("ERROR", "Error!!!");
+                    }
+                } else if (Utils.isValidDate(startDate) && "".equals(endDate)) {
+                    check = dao.updateContract(new ContractDTO(contractId, apartmentId, "", startDate, endDate, status));
+                    if (check) {
+                        url = SUCCESS;
+                        request.setAttribute("SUCCESS", "Success!!!");
+                    } else {
+                        request.setAttribute("ERROR", "Error!!!");
+                    }
                 } else {
-                    request.setAttribute("ERROR", "Error!!!");
+                    request.setAttribute("ERROR", "Sai định dạng ngày!!!");
                 }
             } else {
-                request.setAttribute("ERROR", "Sai định dạng ngày!!!");
+                request.setAttribute("ERROR", mess);
             }
+
         } catch (SQLException e) {
             log("Error at UpdateContractController: " + e.toString());
         } finally {

@@ -29,7 +29,7 @@ public class UpdateApartmentController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        boolean check;
+        boolean check, confirm;
         try {
             String apartmentId = request.getParameter("apartmentId");
             String image = request.getParameter("image");
@@ -37,19 +37,28 @@ public class UpdateApartmentController extends HttpServlet {
             String salePrice = request.getParameter("salePrice");
             String rentPrice = request.getParameter("rentPrice");
             String search = request.getParameter("searchApartment");
-            if (search == null) search = "";
+            if (search == null) {
+                search = "";
+            }
             ApartmentDAO dao = new ApartmentDAO();
             ApartmentDTO apartment = new ApartmentDTO(apartmentId, image, Float.parseFloat(rentPrice), Float.parseFloat(salePrice), status);
-            check = dao.updateApartment(apartment) && dao.UpdateAprtmentPrice(apartment);
-            if (check) {
-                url = SUCCESS + search;
+            confirm = dao.checkRoom(apartmentId);
+            if (status.equals("1") && confirm) {
+                request.setAttribute("ERROR", "Lỗi: Không thể cập nhật trạng thái với phòng đang sử dụng trong hợp đồng!!!");
+            } else {
+                check = dao.updateApartment(apartment) && dao.UpdateAprtmentPrice(apartment);
+                if (check) {
+                    url = SUCCESS + search;
+                }
             }
+
         } catch (NumberFormatException | SQLException e) {
             log("Error at UpdateController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

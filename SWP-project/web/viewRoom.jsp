@@ -24,17 +24,21 @@
                 <c:if test="${requestScope.CONTRACT != null}">
                     <c:if test="${not empty requestScope.CONTRACT }">
                         <div class="form-row">                                
-                            <div class="col-md-4 mb-3">                                    
+                            <div class="col-md-3 mb-3">                                    
                                 <label>Hợp đồng số: </label>
                                 <input type="text" class="form-control" id="validationServer03" readonly="" value="${CONTRACT.contractId}">
                             </div>
-                            <div class="col-md-4 mb-3">                                    
+                            <div class="col-md-3 mb-3">                                    
                                 <label>ID Phòng: </label>
                                 <input type="text" class="form-control" id="validationServer03" readonly="" value="${CONTRACT.apartmentId}">
                             </div>
-                            <div class="col-md-4 mb-3">                                    
+                            <div class="col-md-3 mb-3">                                    
                                 <label>Ngày ký: </label>
                                 <input type="date" class="form-control" id="validationServer03" readonly="" value="${CONTRACT.startDate}">
+                            </div>
+                            <div class="col-md-3 mb-3">                                    
+                                <label>Ngày kết thúc: </label>
+                                <input type="date" class="form-control" id="validationServer03" readonly="" value="${CONTRACT.endDate}">
                             </div>
 
                         </div>

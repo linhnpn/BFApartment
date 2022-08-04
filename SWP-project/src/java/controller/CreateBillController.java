@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "CreateBillController", urlPatterns = {"/CreateBillController"})
 public class CreateBillController extends HttpServlet {
 
-    private static final String SUCCESS = "employee.jsp";
+    private static final String SUCCESS = "MainController?action=ViewAllBill";
     private static final String ERROR = "createBill.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
